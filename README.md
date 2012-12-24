@@ -4,9 +4,18 @@ This is intended for experiments with graphical layout management in [Julia][Jul
 
 ## Rough sketch of "vision"
 
-1. Implement the "highly flexible" core, probably based on a linear programming model such as the [Auckland Layout Model][ALM]. This will allow support for generating figures as files (svg, pdf, png, etc) with very few constraints. TODO: find out whether this core can be directly used for window resize events via callbacks.
-2. Implement representations of toolkit layout managers, hopefully as special cases of the flexible core. Main targets might be Tk and HTML5/CSS (someone besides me should probably do the latter).
+1. Implement the "flexible core," probably based on a linear programming model such as the [Auckland Layout Model][ALM]. This will support figures as vector-graphics files (svg, pdf, etc), and impose very few built-in constraints on layout.
+2. Find out whether the flexible core can be directly used for window resize events via callbacks (main targets might be Tk and HTML5/CSS). If not, then we probably need a raw representation that directly exposes the toolkit's manager, and then for SVG/PDF/etc we may need to mimic the toolkit's behavior in the context of the flexible core (yuck).
 3. Figure out how to integrate this into [Compose][Compose] and/or [Winston][Winston].
+
+## Examples of layout
+
+[Image1][http://postimage.org/image/s6pskvknf/] challenges:
+
+1. Marginal axes must be aligned with the axes of the scatterplot
+2. The image must not look squashed or stretched along any axis
+3. Image is aligned with the scatterplot
+4. Adequate space for all labels, without overlapping other elements
 
 [Julia]: http://julialang.org "Julia"
 [Compose]: https://github.com/dcjones/compose
