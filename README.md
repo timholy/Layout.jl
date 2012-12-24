@@ -4,7 +4,7 @@ This is intended for experiments with graphical layout management in [Julia][Jul
 
 ## Rough sketch of "vision"
 
-1. Implement the "flexible core," probably based on a linear programming model such as the [Auckland Layout Model][ALM]. This will support figures as vector-graphics files (svg, pdf, etc), and impose very few built-in constraints on layout.
+1. Implement the "flexible core," probably based on a linear programming model such as the [Auckland Layout Model][ALM]. This will support figures as vector-graphics files (svg, pdf, etc), and impose very few built-in constraints on layout. We may also want to support other optimizers besides linear programming. If they can't run quickly, they may not be suitable for real-time window resizing, but they could be used to create figures for publication.
 2. Find out whether the flexible core can be directly used for window resize events via callbacks (main targets might be Tk and HTML5/CSS). If not, then we probably need a raw representation that directly exposes the toolkit's manager, and then for SVG/PDF/etc we may need to mimic the toolkit's behavior in the context of the flexible core (yuck).
 3. Figure out how to integrate this into [Compose][Compose] and/or [Winston][Winston].
 
