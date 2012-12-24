@@ -8,8 +8,24 @@ abstract AbstractLayout
 # inside expressions, drop the :
 # :(parent[N]), :(parent[S]), ... refer to parent north, south, ...
 # :(parent[h]) and :(parent[w]) are similar
+#
 
-# This is just a placeholder for now
+# Note: :w may differ from :(parent[w]), if there is no feasible solution for a
+# window of that size. For example, if the layout includes a lot of components
+# with a minimum size, then there may be no solution for very small windows. In
+# this case, the window will simply display the fraction of the layout that fits
+# within the boundaries, anchored at the top left. This is a different approach
+# from ALM's, but seems a lot more straightforward (in particular, it avoids a lot
+# of juggling penalty coefficients).
+# The attempt to make the two equal will be via "soft penalties" added to the LP problem,
+#     abs(w-parent[w])
+#     abs(h-parent[h])
+# See the ALM paper for information about adding soft penalties. Note that these
+# define what a scale of "1" means in terms of penalty coefficients.
+# TOCONSIDER: is there ever a reason to allow these two penalties to have
+# different coefficients?? Can't think of why...
+
+# This is just a placeholder for now, to get development going
 type Window <: AbstractLayout
     x::Int
     y::Int
@@ -59,10 +75,17 @@ type LPData
 end
 LPData() = LPData(zeros(0), zeros(0,0), zeros(0), zeros(0,0), zeros(0), zeros(0), zeros(0))
 
-# c2
-# Note: :wW-:wE may differ from the actual window width, if there is no feasible solution for a window of that size. For example, if the layout includes a lot of components with a minimum size, then there may be no solution for very small windows. In this case, the window will simply display the fraction of the layout that fits within the boundaries, anchored at the top left. This is a different approach from ALM's, but seems a lot more straightforward (and avoids a lot of juggling penalty coefficients).
-LayoutLP(win::Window, xsyms::Vector{Symbol}, ysyms::Vector{Symbol}) = LayoutLP(win, xsyms, ysyms, Array(Expr, 0), [:(abs(w-parent[w])), :(abs(h-parent[h]))], false, zeros(length(xsyms)), zeros(length(ysyms)), false, LPData(), Array(LayoutLP, 0))
-
+LayoutLP(win::Window, xsyms::Vector{Symbol}, ysyms::Vector{Symbol}) = LayoutLP(win,
+    vcat(:W, xsyms, :E),
+    vcat(:N, ysyms, :S),
+    Array(Expr, 0),
+    [:(abs(w-parent[w])), :(abs(h-parent[h]))],
+    false,
+    zeros(length(xsyms)),
+    zeros(length(ysyms)),
+    false,
+    LPData(),
+    Array(LayoutLP, 0))
 
 
 function addconstraints(l::LayoutLP, ex::Expr...)

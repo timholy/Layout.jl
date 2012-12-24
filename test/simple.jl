@@ -11,7 +11,8 @@ l = LayoutLP(win,
          [:margeNT, :margeNB, :scatterT, :scatterB, :buttonsT])
 
 # Create a sub-layout for the buttons
-lbuttons = LayoutLP(l, [:wW, :wE], [:buttonsT, :wS], [:cancelL, :cancelR, :doneL, :doneR], [])
+# The first two refer to parent coordinates, the second introduce tab stops in the child
+lbuttons = LayoutLP(l, [:W, :E], [:buttonsT, :S], [:cancelL, :cancelR, :doneL], [])
 
 # Now specify the geometry. This is done by adding constraints and penalties. Note that a "subplot" function would take care of many of these for you, but here we're going low-level because this GUI has a lot of custom requirements.
 
@@ -23,7 +24,7 @@ l = addconstraints(l,
         # Ensure the proper aspect ratio for the image
         :(384*(imageR-imageL) = 512*(scatterB-scatterT)),
         # Leave enough room for scatterplot y labels
-        :(scatterL-wW > 40)
+        :(scatterL-W > 40)
         # Scatterplot bottom label
         :(buttonsT-scatterB > 40),
         # Ensure a small gap between east marginal axis and the image axis
@@ -32,11 +33,8 @@ l = addconstraints(l,
 # Add penalties: these encourage desirable behavior, but are not strictly enforced
 l = addpenalties(l,
         # we'd like the image to occupy approximately 40% of the horizontal space
-        :(5*abs((imageR-imageL)-0.4*(wE-wW))),
+        :(5*abs((imageR-imageL)-0.4*w)),
         # small gaps for the marginal axes
         :(10*abs(margeEL-scatterR-5)),
-        :(10*abs(margeEL-scatterR-5)),
+        :(10*abs(margeNS-scatterT-5)),
     )
-# Implicit penalties (always present) on the layout width and height:
-#     :(abs(wE-wW-windowwidth)),
-#     :(abs(wS-wN-windowheight))

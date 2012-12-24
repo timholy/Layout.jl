@@ -12,7 +12,8 @@ outermargE, innermargE = plotaxis(l, [:margeEL, :margeER], [:scatterT, :scatterB
 outermargN, innermargN = plotaxis(l, [:scatterL, :scatterR], [:margeNT, :margeNB])
 
 # Create a sub-layout for the buttons
-lbuttons = LayoutLP(l, [:wW, :wE], [:buttonsT, :wS], [:cancelL, :cancelR, :doneL, :doneR], [])
+# The first two refer to parent coordinates, the second introduce tab stops in the child
+lbuttons = LayoutLP(l, [:W, :E], [:buttonsT, :S], [:cancelL, :cancelR, :doneL], [])
 
 # Create the image object inside the image canvas, so we have something to refer to in getting its height and width
 himg = image(cimg)   # note: no image data yet, all we need now is the handle
@@ -27,8 +28,8 @@ l = addconstraints(l,
         # Ensure the proper aspect ratio for the image
         :(height($himg)*(imageR-imageL) = width($himg)*(scatterB-scatterT)),
         # Leave enough room for scatterplot y labels
-        :(left($outerscatter) > wW),
-        :(left($outermargN) > wW),
+        :(left($outerscatter) > W),
+        :(left($outermargN) > W),
         # Scatterplot bottom label
         :(bottom($outerscatter) < buttonsT),
         # Ensure a small gap between east marginal axis and the image axis
@@ -37,11 +38,8 @@ l = addconstraints(l,
 # Add penalties: these encourage desirable behavior, but are not strictly enforced
 l = addpenalties(l,
         # we'd like the image to occupy approximately 40% of the horizontal space
-        :(5*abs((imageR-imageL)-0.4*(wE-wW))),
+        :(5*abs((imageR-imageL)-0.4*w)),
         # small gaps for the marginal axes
         :(10*abs(margeEL-scatterR-5px)),
         :(10*abs(margeEL-scatterR-5px)),
     )
-# Implicit penalties (always present) on the layout width and height:
-#     :(abs(wE-wW-windowwidth)),
-#     :(abs(wS-wN-windowheight))
