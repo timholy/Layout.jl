@@ -107,6 +107,14 @@ function lcparse{T}(::Type{T}, ex::Expr, symdict::Dict{Symbol, Int})
     end
     eval(expr(ex.head, args))
 end
+# TODO?: "soft" constraints, e.g., y <= max (x1,x2) using
+#     x1 <= z
+#     x2 <= z
+#     y <= z
+# + penalty on z.
+# This is tricky from an indexing standpoint, and really in a different category,
+# because the penalty would have to be adjusted by the user to enforce the
+# constraint.
 
 type LinearIndexExpr{T}
     indx::Vector{Int}

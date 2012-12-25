@@ -1,7 +1,7 @@
 require("ParameterVector")
 module Layout
 using ParameterVector
-import Base.show
+import Base.show, Base.parse
 
 abstract AbstractLayout
 
@@ -52,8 +52,13 @@ function ref(win::Window, s::Symbol)
     end
 end
 
+type LPData
+    f::Vector{Float64}
+    lc::LinearConstraints{Float64}
+end
+LPData() = LPData(zeros(0), LinearConstraints(Float64))
 type LayoutLP <: AbstractLayout
-    parent
+    parent::AbstractLayout
     xsyms::Vector{Symbol}  # names of x,y tab stops
     ysyms::Vector{Symbol}
     constraints::Vector{Expr}
@@ -63,14 +68,8 @@ type LayoutLP <: AbstractLayout
     ytabs::Vector{Float64}
     solved::Bool
     lp::LPData
-    children::Vector{AbstractLayout}
+    children::Vector
 end
-
-type LPData
-    f::Vector{Float64}
-    lc::LinearConstraints{Float64}
-end
-LPData() = LPData(zeros(0), lc(Float64))
 
 LayoutLP(win::Window, xsyms::Vector{Symbol}, ysyms::Vector{Symbol}) = LayoutLP(win,
     vcat(:W, xsyms, :E),
@@ -78,18 +77,28 @@ LayoutLP(win::Window, xsyms::Vector{Symbol}, ysyms::Vector{Symbol}) = LayoutLP(w
     Array(Expr, 0),
     [:(abs(w-parent[w])), :(abs(h-parent[h]))],
     false,
-    zeros(length(xsyms)),
-    zeros(length(ysyms)),
+    zeros(length(xsyms)+2),
+    zeros(length(ysyms)+2),
     false,
     LPData(),
     Array(LayoutLP, 0))
 
+function increasing(l::LayoutLP, syms::Vector{Symbol})
+    if isempty(syms)
+        return l
+    end
+    args = Array(Any, 2*length(syms)-1)
+    args[1:2:end] = syms
+    args[2:2:end] = :(<)
+    addconstraints(l, expr(:comparison, args))
+end
 
 function addconstraints(l::LayoutLP, ex::Expr...)
     if !isempty(ex)
         l.constraints = vcat(l.constraints, ex...)
         l.parsed = false
     end
+    l
 end
 
 function addtabsx(l::LayoutLP, s::Symbol...)
@@ -102,9 +111,11 @@ end
 # addtabsy
 
 function parse(l::LayoutLP)
+    l.lp.lc = LinearConstraints(Float64, vcat(l.xsyms, l.ysyms), l.constraints)
+    l
 end
 
 
-export Layout, LayoutLP, addconstraints, addpenalties, 
+export Layout, LayoutLP, Window, addconstraints, increasing
 
 end
