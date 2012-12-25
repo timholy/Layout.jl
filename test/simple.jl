@@ -21,13 +21,13 @@ l = LayoutLP(win,
 # Create a sub-layout for the buttons
 # After the parent, the next two arguments refer to parent coordinates.
 # The last two arguments introduce tab stops in the child
-# lbuttons = LayoutLP(l, [:W, :E], [:buttonsT, :S], [:cancelL, :cancelR, :doneL], [])
+lbuttons = LayoutLP(l, [:W, :E], [:buttonsT, :S], [:cancelL, :cancelR, :doneL], [])
 
 # Now specify the geometry. This is done by adding constraints and penalties. Note that a "subplot" function would take care of many of these for you, but here we're going low-level because this GUI has a lot of custom requirements.
 
 # First we require that the tabstops are in increasing order. Can also use "decreasing". One can pick out a subset of the tab stops and do something different for the rest (partial ordering)
 increasing(l, l.xsyms)
-l = increasing(l, l.ysyms)
+l = increasing(l, l.ysyms)  # ensure it returns a value
 # Now add particular constraints
 l = addconstraints(l,
         # Ensure the proper aspect ratio for the image
