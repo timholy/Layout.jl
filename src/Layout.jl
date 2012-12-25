@@ -1,4 +1,6 @@
+require("ParameterVector")
 module Layout
+using ParameterVector
 import Base.show
 
 abstract AbstractLayout
@@ -66,14 +68,9 @@ end
 
 type LPData
     f::Vector{Float64}
-    A::Matrix{Float64}
-    b::Vector{Float64}
-    Aeq::Matrix{Float64}
-    beq::Vector{Float64}
-    lb::Vector{Float64}
-    ub::Vector{Float64}
+    lc::LinearConstraints{Float64}
 end
-LPData() = LPData(zeros(0), zeros(0,0), zeros(0), zeros(0,0), zeros(0), zeros(0), zeros(0))
+LPData() = LPData(zeros(0), lc(Float64))
 
 LayoutLP(win::Window, xsyms::Vector{Symbol}, ysyms::Vector{Symbol}) = LayoutLP(win,
     vcat(:W, xsyms, :E),
