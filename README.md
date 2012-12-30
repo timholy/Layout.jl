@@ -10,12 +10,18 @@ This is intended for experiments with graphical layout management in [Julia][Jul
 
 ## Examples of layout
 
-[Image1][http://postimage.org/image/s6pskvknf/] challenges:
+[Image1](http://postimage.org/image/s6pskvknf/) challenges:
 
 1. Marginal axes must be aligned with the axes of the scatterplot
 2. The image must not look squashed or stretched along any axis
 3. Image is aligned with the scatterplot
 4. Adequate space for all labels, without overlapping other elements
+
+## Status
+
+There's a first draft of a working manager, based on linear programming. The test file "simple.jl" should run and produce reasonable results.
+
+The LP interface is based on [SymbolicLP](https://github.com/timholy/SymbolicLP.jl).
 
 [Julia]: http://julialang.org "Julia"
 [Compose]: https://github.com/dcjones/compose
