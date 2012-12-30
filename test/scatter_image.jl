@@ -1,11 +1,29 @@
 # API demo
 # This is for the layout here: http://postimage.org/image/s6pskvknf/
 
-# Create the overall layout inside window "win". This is specified in terms of named tabstops. 
-l = LayoutLP(win,
-         [:scatterL, :scatterR, :margeEL, :margeER, :imageL, :imageR],
-         [:margeNT, :margeNB, :scatterT, :scatterB, :buttonsT])
+require("LayoutLP")
+using LayoutLP
+
+# Create a fake window
+win = Window(0, 0, 800, 600)
+
+# Create the overall layout inside window "win". This is specified in terms of named tabstops.
+xtabs = [:scatterL, :scatterR, :margeEL, :margeER, :imageL, :imageR]
+ytabs = [:margeNT, :margeNB, :scatterT, :scatterB, :buttonsT]
+l = LayoutLP(win, xtabs, ytabs)
+
+# Now we'd probably do something like this:
 cimage = canvas(l, [:imageL, :imageR], [:scatterT, :scatterB])
+himage = image(cimage, "peppers.png")
+# ... and then rely on height(himage) and width(himage) to give us the image dimensions.
+# But because the canvas & image functionality is not yet worked out,
+# let's do it this way:
+imsz = [384,512]
+height = () -> imsz[1]
+width = () -> imsz[2]
+# These are only nominally hard-coding the image size; you could change
+# imsz[1] or imsz[2] and it would update to the new dimensions.
+
 # For plot axes, the "outer" canvas include all labels, the "inner" canvas is the graphing area
 outerscatter, innerscatter = plotaxis(l, [:scatterL, :scatterR], [:scatterT, :scatterB])
 outermargE, innermargE = plotaxis(l, [:margeEL, :margeER], [:scatterT, :scatterB])
