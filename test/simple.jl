@@ -6,8 +6,8 @@
 #    hard-codes the minimum space needed for the axis labels
 #    uses pixels for all measurements
 
-# require("Layout")
-# using Layout
+require("Layout")
+using Layout
 
 # Create a fake window
 win = Window(0, 0, 800, 600)
@@ -24,8 +24,8 @@ l = LayoutLP(win, xtabs, ytabs)
 
 # Specify image dimensions
 imsz = [384,512]
-height = () -> imsz[1]
-width = () -> imsz[2]
+imheight = () -> imsz[1]
+imwidth = () -> imsz[2]
 # These are only nominally hard-coding the image size; you could change
 # imsz[1] or imsz[2] and it would update to the new dimensions.
 
@@ -40,7 +40,7 @@ increasing(l, ytabs)
 # Now add particular constraints
 addconstraints(l,
         # Ensure the proper aspect ratio for the image
-        :($height()*(imageR-imageL) == $width()*(scatterB-scatterT)),
+        :($imheight()*(imageR-imageL) == $imwidth()*(scatterB-scatterT)),
         # Leave enough room for scatterplot y labels
         :(scatterL-W > 40),
         # Scatterplot bottom label
