@@ -24,6 +24,6 @@ There's a first draft of a working manager, based on linear programming. The tes
 The LP interface is based on [SymbolicLP](https://github.com/timholy/SymbolicLP.jl).
 
 [Julia]: http://julialang.org "Julia"
-[Compose]: https://github.com/dcjones/compose
+[Compose]: https://github.com/dcjones/Compose.jl
 [ALM]: https://www.cs.auckland.ac.nz/courses/compsci705s2c/lectures/geraldpapers/reading1_LutterothStrandhWeber.pdf
 [Winston]: https://github.com/nolta/Winston.jl
