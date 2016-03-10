@@ -25,5 +25,5 @@ The LP interface is based on [SymbolicLP](https://github.com/timholy/SymbolicLP.
 
 [Julia]: http://julialang.org "Julia"
 [Compose]: https://github.com/dcjones/Compose.jl
-[ALM]: https://www.cs.auckland.ac.nz/courses/compsci705s2c/lectures/geraldpapers/reading1_LutterothStrandhWeber.pdf
+[ALM]: https://www.cs.auckland.ac.nz/courses/compsci705s1c/archive/2008/lectures/GW-HCI-02.pdf
 [Winston]: https://github.com/nolta/Winston.jl
